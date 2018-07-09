@@ -40,6 +40,28 @@ resource "aws_iam_role" "eks-node" {
 POLICY
 }
 
+# ---------------------------------------------------------------------------------------------------------------------
+# IAM role which can assume other roles and assign it to each kubernetes worker
+# https://github.com/jtblin/kube2iam#iam-roles
+# ---------------------------------------------------------------------------------------------------------------------
+
+data "aws_iam_policy_document" "sts_policy" {
+  statement {
+    actions = [
+      "sts:AssumeRole",
+    ]
+    resources = [
+      "*",
+    ]
+  }
+}
+
+resource "aws_iam_role_policy" "eks-node-sts-Policy" {
+  name   = "sts-policy"
+  role = "${aws_iam_role.eks-node.name}"
+  policy = "${data.aws_iam_policy_document.sts_policy.json}"
+}
+
 #         "Service": "ec2.amazonaws.com"
 
 resource "aws_iam_role_policy_attachment" "eks-node-AmazonEKSWorkerNodePolicy" {

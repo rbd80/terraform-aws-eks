@@ -115,26 +115,27 @@ function build_template_cluster() {
     #AWS_PROFILE=terraform_svc helm ls --tls --tls-ca-cert ca.cert.pem --tls-cert helm.cert.pem --tls-key helm.key.pem
 
     AWS_PROFILE=terraform_svc kubectl apply -f kubernetes/manifests/kube2iam/kube2iam.yaml
-    AWS_PROFILE=terraform_svc kubectl apply -f kubernetes/manifests/alb-ingress/alb-ingress-controller.yaml
+
+    #AWS_PROFILE=terraform_svc kubectl apply -f kubernetes/manifests/alb-ingress/alb-ingress-controller.yaml
     #https://github.com/app-registry/appr-helm-plugin
-    AWS_PROFILE=terraform_svc kubectl apply -f kubernetes/manifests/externaldns/externaldns.yaml
+    #AWS_PROFILE=terraform_svc kubectl apply -f kubernetes/manifests/externaldns/externaldns.yaml
 
 
 #kubectl delete namespace helm-tiller get deployment
-kubectl -n kube-system get po
-kubectl -n kube-system logs alb-ingress-controller-744cd68896-lmnq5
+#kubectl -n kube-system get po
+#kubectl -n kube-system logs alb-ingress-controller-744cd68896-lmnq5
 #AWS_PROFILE=terraform_svc kubectl -n helm-tiller get svc/tiller-deploy deploy/tiller-deploy
     #AWS_PROFILE=terraform_svc kubectl apply -f kubernetes/manifests/kube2iam/kube2iam.yaml
     #AWS_PROFILE=terraform_svc kubectl apply -f kubernetes/manifests/HELM/helm_tiller.yaml
     #TODO Add the secure option
-AWS_PROFILE=terraform_svc helm repo add stable https://kubernetes-charts.storage.googleapis.com
-AWS_PROFILE=terraform_svc kubectl -n kube-system delete deployment tiller-deploy
+#AWS_PROFILE=terraform_svc helm repo add stable https://kubernetes-charts.storage.googleapis.com
+#AWS_PROFILE=terraform_svc kubectl -n kube-system delete deployment tiller-deploy
 
    #istio
-AWS_PROFILE=terraform_svc kubectl -n kube-system get deployment
-AWS_PROFILE=terraform_svc kubectl logs tiller-deploy-5dbc7f7dc5-8gp8p -n kube-system
+#AWS_PROFILE=terraform_svc kubectl -n kube-system get deployment
+#AWS_PROFILE=terraform_svc kubectl logs tiller-deploy-5dbc7f7dc5-8gp8p -n kube-system
 
-AWS_PROFILE=terraform_svc kubectl get nodes -n kube-system
+#AWS_PROFILE=terraform_svc kubectl get nodes -n kube-system
     #AWS_PROFILE=terraform_svc kubectl apply -f kubernetes/manifests/monitoring/prometheus-operator
     #AWS_PROFILE=terraform_svc kubectl delete -f kubernetes/manifests/monitoring/prometheus-operator
     #AWS_PROFILE=terraform_svc kubectl apply -f kubernetes/Prometheus/

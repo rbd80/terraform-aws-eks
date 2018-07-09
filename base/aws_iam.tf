@@ -93,6 +93,9 @@ resource "aws_iam_role_policy" "alb-policy" {
 EOF
 }
 
+# ---------------------------------------------------------------------------------------------------------------------
+# Trust Relationship for Worker Node
+# ---------------------------------------------------------------------------------------------------------------------
 resource "aws_iam_role" "alb-role" {
   name = "${module.cluster_label.id}-alb-role"
 
@@ -100,20 +103,27 @@ resource "aws_iam_role" "alb-role" {
 {
   "Version": "2012-10-17",
   "Statement": [
-     {
-            "Effect": "Allow",
-            "Action": "sts:AssumeRole",
-            "Principal": {
-                    "AWS": "${aws_iam_role.eks-node.arn}",
-                    "Service": "ec2.amazonaws.com"
-                  }
-      }
+    {
+      "Sid": "",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    },
+    {
+      "Sid": "",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "${aws_iam_role.eks-node.arn}"
+      },
+      "Action": "sts:AssumeRole"
+    }
   ]
 }
 EOF
 }
-
-data "aws_iam_policy_document" "assume_alb_role" {
+data "aws_iam_policy_document" "assume_alb-role" {
   statement {
     actions   = ["sts:AssumeRole"]
     resources = ["${aws_iam_role.alb-role.arn}"]
@@ -123,7 +133,7 @@ data "aws_iam_policy_document" "assume_alb_role" {
 resource "aws_iam_policy" "assume_role_alb" {
   name        = "${module.cluster_label.id}-permit-assume-alb-role"
   description = "Allow assuming alb role"
-  policy      = "${data.aws_iam_policy_document.assume_alb_role.json}"
+  policy      = "${data.aws_iam_policy_document.assume_alb-role.json}"
 }
 
 resource "aws_iam_role_policy_attachment" "eks_alb" {
